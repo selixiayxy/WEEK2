@@ -49,7 +49,7 @@ class Particle{
 
 function setup() {
 
-  canvas = createCanvas(600, 600);
+  canvas = createCanvas(windowWidth,windowHeight);
   canvas.parent("sketch-container"); //move our canvas inside this HTML element
   
   myShape = {
@@ -78,6 +78,7 @@ function draw() {
   //Drawing
   noStroke();
 
+
   
   if(cleanState == 1){
     for(let i=0;i<particle.length-1;i++){
@@ -88,6 +89,11 @@ particle[i].update();
 cleanState =0; 
 }
   
+if(cleanState ==0){
+  fill(255-counter);
+  }
+  circle(tamaX,tamaY,tamaDiam*1.5);
+    
  if(tamaState == hungry){
     fill(255);
     if(tamaDiam > width/4){
@@ -102,25 +108,28 @@ cleanState =0;
     }
   }
 
+  
 
   if(myShape.y == tamaY-tamaDiam/2){
     fill(255,255,0);
   }
 
-  if(cleanState ==0){
-    fill(255-counter);
-    }
-      
+ 
   circle(tamaX,tamaY,tamaDiam);
-  fill(0);
-  let mouthOffset = tamaDiam/2;
-  rect(tamaX-mouthOffset/2,tamaY,mouthOffset,3);
+
+  
+
+
 
   updateFood();//update and draw food
 
   if(food.length > 0 && tamaState == hungry){
     eatFood();
   } 
+
+  fill(0);
+  let mouthOffset = tamaDiam/2;
+  rect(tamaX-mouthOffset/2,tamaY,mouthOffset,3);
   
   if(food.length <= foodLimit-1){
     button.html("FEED");
@@ -135,6 +144,7 @@ cleanState =0;
   counter+=0.05;
 
 }
+
 function eatFood(){
 for(let i = food.length-1; i >= 0 ; i--){
     let distanceY =  tamaY - food[i].y;
@@ -144,11 +154,13 @@ for(let i = food.length-1; i >= 0 ; i--){
       circle(tamaX,tamaY,tamaDiam/2);
     }
 
-    if(abs(distanceY) < 10){
+    if(abs(distanceY) < tamaDiam/4){
       tamaDiam += food[food.length-1].d;
       food.splice(i,1);
     }
   }
+
+
 }
 
 function updateFood(){
@@ -249,5 +261,11 @@ function playButtonPressed(){
 function cleanButtonPress(){
 cleanState =1;
 counter =0;
+}
+
+function windowResized() {
+
+  resizeCanvas(windowWidth, windowHeight);
+
 }
 
